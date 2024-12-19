@@ -12,13 +12,18 @@
 
 def isPalindrome(word):
     
-
     # IF PASSED ARGUMENT IS LENGTH 1 
         # RETURN TRUE
+    if len(word) == 1:
+        return True
     
     # IF FIRST AND LAST CHARACTERS ARE NOT EQUAL
         # USE STRING SLICING TO ACCESS LETTERS
         # RETURN FALSE
+    first = word[0]
+    last  = word[-1]
+    print(first)
+    print(last)
         
     # DO A RECURSIVE CALL 
         # PASS THE WORD TO THE FUNCTION WITHOUT THE FIRST AND LAST CHARACTERS
@@ -33,12 +38,13 @@ palindrome = False
 
 while palindrome == False:
 
-    word_to_check = input("Enter a word to check if it is a palindrome. You have 5 attempts. :: ")
+    word_to_check = input("Enter a word to see if it is a palindrome. You have 5 attempts. :: ")
 
+    attempt += 1
+    
     if (len(word_to_check)) == 0:
-        print ("The word can't be an empty string. Try again.")
+        print ("The word can't be an empty string. 1 attempt used.  Try again.")
     else:
-        attempt += 1
         
         palindrome = isPalindrome(word_to_check)
         
