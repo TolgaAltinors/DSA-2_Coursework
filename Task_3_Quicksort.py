@@ -69,11 +69,17 @@ def get_list_to_sort() -> list :
         quicksort(array, start_index, pivot_index - 1)
         quicksort(array, pivot_index + 1, end_index)
         
-
 3 - ADD FUNCTION TO READ IN FILE
 
 """
 
+def quicksort(list_to_sort, start = 0, end = None):
+    
+    pass
+
+
+def create_sublist(sub_list, start, end):
+    pass
 
 
 if __name__ == '__main__':
@@ -81,3 +87,6 @@ if __name__ == '__main__':
     # Read in file with elements to sort
     capital_cities = get_list_to_sort()
     print(f"Number of cities to sort : {len(capital_cities)}")
+    
+    quicksort(capital_cities)
+    
