@@ -75,11 +75,55 @@ def get_list_to_sort() -> list :
 
 def quicksort(list_to_sort, start = 0, end = None):
     
-    pass
+    print(f"Number of cities to sort : {len(list_to_sort)}")
+    print(f"Sublist : {list_to_sort}")
+    
+    if end == None:
+        end = len(list_to_sort) - 1
+    
+    if start < end:
+
+        pivot_index = create_sublist(list_to_sort, start, end)
+
+        print("")
+        print(f"Number of cities to sort : {len(list_to_sort[start:pivot_index])}")
+        print(f"Sublist : {list_to_sort[start:pivot_index]}")
 
 
 def create_sublist(sub_list, start, end):
-    pass
+
+    # set pivot to be the second to last element
+    pivot_index = end - 1
+    
+    # pivot represent the value we are comparing against
+    pivot = sub_list[pivot_index]
+    
+    print(f"Pivot index : {pivot_index}")
+    print(f"Pivot value : {pivot}")
+
+    sub_list[pivot_index], sub_list[end] = sub_list[end], sub_list[pivot_index]  # Move pivot to end
+    
+    # variable to track new pivot position
+    i = start - 1
+
+    for j in range(start, end):
+
+        if (sub_list[j] > pivot):
+            print(f"FALSE --> {sub_list[j]} > {pivot} --> NO SWAP")
+
+        if sub_list[j] <= pivot:
+            # Increment pivot position
+            i += 1
+            
+            if sub_list[i] != sub_list[j]:
+                print(f" TRUE --> {sub_list[j]} <= {pivot} --> SWAP")
+                sub_list[i], sub_list[j] = sub_list[j], sub_list[i]
+    
+    # move the pivot to the right place        
+    sub_list[i + 1], sub_list[end] = sub_list[end], sub_list[i + 1]
+    
+    return i + 1
+
 
 
 if __name__ == '__main__':
