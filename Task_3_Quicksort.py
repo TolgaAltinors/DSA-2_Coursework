@@ -1,3 +1,33 @@
+import os
+
+# Store the directory we are in
+current_dir = os.getcwd()
+print (current_dir)
+
+def get_list_to_sort() -> list :
+    """ Read in file from current directory and return a list
+        Arguments:
+            None
+        Returns:
+            {list} -- list of words
+    """
+    # Read in file with list of cities - file is in the same location as script
+    file_name = "List_of_Cities.txt"
+    
+    # Build the path for the text file
+    full_path = os.path.join(current_dir, file_name)
+    
+    # Create list to hold the data
+    capital_cities = []
+    
+    # Open the file and read contents into list
+    with open(full_path, 'r') as f:
+        for line in f:
+            capital_cities.append(line.strip())
+                
+    return capital_cities
+
+
 """
 1 - ADD FUNCTION TO RETURN PARTITION INDEX
 
@@ -43,3 +73,11 @@
 3 - ADD FUNCTION TO READ IN FILE
 
 """
+
+
+
+if __name__ == '__main__':
+
+    # Read in file with elements to sort
+    capital_cities = get_list_to_sort()
+    print(f"Number of cities to sort : {len(capital_cities)}")
