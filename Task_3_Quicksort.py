@@ -1,4 +1,5 @@
 import os
+import time
 
 # Store the directory we are in
 current_dir = os.getcwd()
@@ -28,56 +29,18 @@ def get_list_to_sort() -> list :
     return capital_cities
 
 
-"""
-1 - ADD FUNCTION TO RETURN PARTITION INDEX
+def output_to_console(list_to_output):
+    
+    for ind, city in enumerate(list_to_output):
+        print(f"{ind+1:03} - {city}")    
 
-    Function signature:
-        array to sort
-        start index
-        end index
-        
-        pivot_index := len(array) - 1 (Select second to last element)
-        pivot       := array[pivot_index]
-    
-        (swap last 2 elements around and make the pivot the last in array)
-        swap array[pivot_index] with array[end_index]
-    
-        i := start_index - 1
-    
-        for j := 0 to len(array) do
-            if array[j] < pivot then
-                swap array[i] with array[j]
-                
-                i := i + 1 (Move the pivot index over by one)
-
-        swap array[i + 1] with array[end_index]
-    
-        return i + 1 (new pivot)
-    
-    
-2 - ADD QUICK SORT FUNCTION
-
-    Function signature:
-        array to sort
-        start index
-        end index
-        
-        if start_index < end_index then
-        
-        pivot_index := call partition function (array, start_index, end_index)
-        
-        quicksort(array, start_index, pivot_index - 1)
-        quicksort(array, pivot_index + 1, end_index)
-        
-3 - ADD FUNCTION TO READ IN FILE
-
-"""
 
 def quicksort(list_to_sort, start = 0, end = None):
     
-    print(f"Number of cities to sort : {len(list_to_sort)}")
-    print(f"Sublist : {list_to_sort}")
+    # print(f"Number of cities to sort : {len(list_to_sort)}")
+    # print(f"Sublist : {list_to_sort}")
     
+    # first time we call quicksort
     if end == None:
         end = len(list_to_sort) - 1
     
@@ -87,7 +50,10 @@ def quicksort(list_to_sort, start = 0, end = None):
 
         print("")
         print(f"Number of cities to sort : {len(list_to_sort[start:pivot_index])}")
-        print(f"Sublist : {list_to_sort[start:pivot_index]}")
+        # print(f"Sublist : {list_to_sort[start:pivot_index]}")
+        
+        quicksort(list_to_sort, start, pivot_index - 1)
+        quicksort(list_to_sort, pivot_index + 1, end)
 
 
 def create_sublist(sub_list, start, end):
@@ -108,15 +74,15 @@ def create_sublist(sub_list, start, end):
 
     for j in range(start, end):
 
-        if (sub_list[j] > pivot):
-            print(f"FALSE --> {sub_list[j]} > {pivot} --> NO SWAP")
+        # if (sub_list[j] > pivot):
+        #     print(f"FALSE --> {sub_list[j]} > {pivot} --> NO SWAP")
 
         if sub_list[j] <= pivot:
             # Increment pivot position
             i += 1
             
             if sub_list[i] != sub_list[j]:
-                print(f" TRUE --> {sub_list[j]} <= {pivot} --> SWAP")
+                # print(f" TRUE --> {sub_list[j]} <= {pivot} --> SWAP")
                 sub_list[i], sub_list[j] = sub_list[j], sub_list[i]
     
     # move the pivot to the right place        
@@ -134,3 +100,23 @@ if __name__ == '__main__':
     
     quicksort(capital_cities)
     
+    # Output return from quick sort and print to console
+    user_response = input("Display output to console or output to file? Type 'D' (Display) or 'O' (Output). ")
+    
+    if user_response == 'D':
+        output_to_console(capital_cities)
+
+    elif user_response == 'O':
+        out_file = "List_of_Cities_Sorted.txt"
+        full_path = os.path.join(current_dir, out_file)
+
+        with open(full_path, 'w') as f:
+                for line in capital_cities:
+                    f.write(line + '\n')
+        print (f"File output to: {full_path}")
+    else:
+        print("*******************")
+        print(f"*** User response '{user_response}' not recognised. Displaying to screen. ***")
+        print("*******************")
+        time.sleep(2)
+        output_to_console(capital_cities)
