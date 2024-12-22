@@ -1,9 +1,10 @@
 import os
 import time
+from pathlib import Path
 
-# Store the directory we are in
-current_dir = os.getcwd()
-print (current_dir)
+# Get directory to read/write file
+script_fullpath = os.path.abspath(__file__)  
+script_path = os.path.dirname(script_fullpath)  
 
 def get_list_to_sort() -> list :
     """ Read in file from current directory and return a list
@@ -16,7 +17,7 @@ def get_list_to_sort() -> list :
     file_name = "List_of_Cities.txt"
     
     # Build the path for the text file
-    full_path = os.path.join(current_dir, file_name)
+    full_path = os.path.join(script_path, file_name)
     
     # Create list to hold the data
     capital_cities = []
@@ -48,8 +49,8 @@ def quicksort(list_to_sort, start = 0, end = None):
 
         pivot_index = create_sublist(list_to_sort, start, end)
 
-        print("")
-        print(f"Number of cities to sort : {len(list_to_sort[start:pivot_index])}")
+        # print("")
+        # print(f"Number of cities to sort : {len(list_to_sort[start:pivot_index])}")
         # print(f"Sublist : {list_to_sort[start:pivot_index]}")
         
         quicksort(list_to_sort, start, pivot_index - 1)
@@ -64,8 +65,8 @@ def create_sublist(sub_list, start, end):
     # pivot represent the value we are comparing against
     pivot = sub_list[pivot_index]
     
-    print(f"Pivot index : {pivot_index}")
-    print(f"Pivot value : {pivot}")
+    # print(f"Pivot index : {pivot_index}")
+    # print(f"Pivot value : {pivot}")
 
     sub_list[pivot_index], sub_list[end] = sub_list[end], sub_list[pivot_index]  # Move pivot to end
     
@@ -88,6 +89,7 @@ def create_sublist(sub_list, start, end):
     # move the pivot to the right place        
     sub_list[i + 1], sub_list[end] = sub_list[end], sub_list[i + 1]
     
+    # Return pivot position
     return i + 1
 
 
@@ -108,7 +110,7 @@ if __name__ == '__main__':
 
     elif user_response == 'O':
         out_file = "List_of_Cities_Sorted.txt"
-        full_path = os.path.join(current_dir, out_file)
+        full_path = os.path.join(script_path, out_file)
 
         with open(full_path, 'w') as f:
                 for line in capital_cities:
