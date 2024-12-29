@@ -20,7 +20,7 @@ def add_node_positions():
 
 def create_original_graph(G, edges, node_pos):
     
-    fig = plt.figure(figsize=(5, 4), frameon=False)
+    fig = plt.figure(figsize=(6, 5), frameon=False)
     
     G.add_weighted_edges_from(edges)
 
@@ -41,7 +41,9 @@ def create_original_graph(G, edges, node_pos):
     
     plt.suptitle("Original graph - Close window to continue",color='red')
     plt.margins(0.2, 0.2)
-    plt.show()
+    plt.show(block=False)
+    plt.pause(5)
+
 
 # CREATE ADJACENCY LIST
 def create_adjacency_list(G):
@@ -118,33 +120,49 @@ def find_mst(G, adj_list, start_node):
 
 def create_final_mst_graph(G_mst, mst_edges, node_pos):
 
-    fig = plt.figure(figsize=(5, 4), frameon=False)
+    fig = plt.figure(figsize=(6, 5), frameon=False)
+    
+    total_distance = 0
     
     # Add edges based on mst values
-    for node in range(1,len(mst_edges)):
+    for node_index in range(1,len(mst_edges)):
         
-        node_elements = mst_edges[node]
+        node_elements = mst_edges[node_index]
         start_node = node_elements[0]
         end_node = node_elements[1]
         attribute = node_elements[2]
 
-        G_mst.add_edge(start_node, end_node, weight=attribute)        
+        # distance covered
+        total_distance += attribute
+        
+        G_mst.add_edge(start_node, end_node, weight=attribute)
+        
+        # display the last added node as red
+        node_colour = []
+        for ind in range(node_index):
+            node_colour.append('lightgreen')
 
-    pos = nx.spring_layout(G_mst)
-    nx.draw(G_mst,
-            pos=node_pos,
-            with_labels=True,
-            node_size=700,
-            node_color='lightgreen',
-            font_size=10,
-            font_weight='bold')
-    
-    mst_edge_labels = nx.get_edge_attributes(G_mst, 'weight')
-    nx.draw_networkx_edge_labels(G_mst, pos=node_pos, edge_labels=mst_edge_labels)
-    
-    plt.suptitle("Minimum Spanning Tree - Prim's Algorithm", color='green')
-    plt.margins(0.2, 0.2)
-    plt.show()
+        node_colour.append('red')
+
+        pos = nx.spring_layout(G_mst)
+        nx.draw(G_mst,
+                pos=node_pos,
+                with_labels=True,
+                node_size=700,
+                node_color=node_colour,  #'lightgreen',
+                font_size=10,
+                font_weight='bold')
+        
+        mst_edge_labels = nx.get_edge_attributes(G_mst, 'weight')
+        nx.draw_networkx_edge_labels(G_mst, pos=node_pos, edge_labels=mst_edge_labels)
+        
+        plt.suptitle(f"Minimum Spanning Tree - Prim's Algorithm - Distance = {str(total_distance)}", color='green')        
+        plt.margins(0.2, 0.2)
+        plt.show(block=False)
+        if node_index == len(mst_edges)-1:
+            plt.pause(5)
+        else:
+            plt.pause(2)
 
 
 if __name__ == '__main__':
