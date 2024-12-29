@@ -37,9 +37,80 @@ def create_original_graph(G, edges, node_pos):
 
     nx.draw_networkx_edge_labels(G, pos=node_pos, edge_labels=edge_labels)
     
-    plt.suptitle("Original graph",color='red')
+    plt.suptitle("Original graph - Close window to continue",color='red')
     plt.margins(0.2, 0.2)
     plt.show()
+
+# CREATE ADJACENCY LIST
+def create_adjacency_list(G):
+
+    adj_list = { node:[] for node in G.nodes }
+
+    # loop through nodes
+    for node in G.nodes:
+        
+        # find all neighbors of node 
+        neighbor_list = [n for n in G.neighbors(node)]
+        
+        print (f"Neighbors of ({node}) = {neighbor_list}")
+        
+        # loop through start node, destination node and weight properties
+        for s, d, w in G.edges(data="weight"):
+            
+            if s == node and d in neighbor_list:
+                
+                # add the weight and destination node
+                neighbor_to_add = (w, d)
+                adj_list[node].append(neighbor_to_add)
+                # also add the opposite direction
+                neighbor_to_add = (w, node)
+                adj_list[d].append(neighbor_to_add)
+
+    return adj_list
+
+
+def find_mst(G, adj_list, start_node):
+    
+    # add start node twice - second one representing the parent node
+    start_node = start_node + '-' + start_node
+    
+    mst_edges = []  # return valus to draw mst
+    visited = []
+    
+    # initialize heap value
+    minHeap = [[0, start_node]] # distance, start_node
+
+    number_of_nodes = len(adj_list)
+
+    while len(visited) < number_of_nodes:
+        
+        # retrieve minimum valued node from heap
+        dist, nodes = heapq.heappop(minHeap)
+        
+        # split nodes
+        node, parent_node = nodes.split('-')
+        
+        print(f"Popping node {node} with weigth {dist} from the heap")
+
+        # create list for creating final mst
+        path = [] # [start_node, destination_node, distance]
+        
+        path.append(parent_node)
+        path.append(node)
+        path.append(dist)
+        mst_edges.append(path)
+        
+        visited.append(node)
+        
+        for next_dist, next_node in adj_list[node]:
+            
+            if next_node not in visited:
+                
+                print(f"Pushing node {next_node} with weigth {next_dist} onto the heap")
+                next_node = next_node + '-' + node
+                heapq.heappush(minHeap, [next_dist, next_node])
+                
+    return mst_edges
 
 
 if __name__ == '__main__':
@@ -73,9 +144,9 @@ if __name__ == '__main__':
     create_original_graph(G, edges, node_pos)
 
     # create adjancey list to hold each nodes' neigbours
-    
+    adj_list = create_adjacency_list(G)
     
     # find mst (G, adj list, start node)
-    
+    mst_edges = find_mst(G, adj_list, 'A')
     
     # show final mst
