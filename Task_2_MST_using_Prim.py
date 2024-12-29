@@ -20,6 +20,8 @@ def add_node_positions():
 
 def create_original_graph(G, edges, node_pos):
     
+    fig = plt.figure(figsize=(5, 4), frameon=False)
+    
     G.add_weighted_edges_from(edges)
 
     pos = nx.circular_layout(G)
@@ -113,10 +115,39 @@ def find_mst(G, adj_list, start_node):
     return mst_edges
 
 
-if __name__ == '__main__':
 
+def create_final_mst_graph(G_mst, mst_edges, node_pos):
 
     fig = plt.figure(figsize=(5, 4), frameon=False)
+    
+    # Add edges based on mst values
+    for node in range(1,len(mst_edges)):
+        
+        node_elements = mst_edges[node]
+        start_node = node_elements[0]
+        end_node = node_elements[1]
+        attribute = node_elements[2]
+
+        G_mst.add_edge(start_node, end_node, weight=attribute)        
+
+    pos = nx.spring_layout(G_mst)
+    nx.draw(G_mst,
+            pos=node_pos,
+            with_labels=True,
+            node_size=700,
+            node_color='lightgreen',
+            font_size=10,
+            font_weight='bold')
+    
+    mst_edge_labels = nx.get_edge_attributes(G_mst, 'weight')
+    nx.draw_networkx_edge_labels(G_mst, pos=node_pos, edge_labels=mst_edge_labels)
+    
+    plt.suptitle("Minimum Spanning Tree - Prim's Algorithm", color='green')
+    plt.margins(0.2, 0.2)
+    plt.show()
+
+
+if __name__ == '__main__':
     
     # Create a graph objects
     G = nx.Graph()
@@ -150,3 +181,4 @@ if __name__ == '__main__':
     mst_edges = find_mst(G, adj_list, 'A')
     
     # show final mst
+    create_final_mst_graph(G_mst, mst_edges, node_pos)
