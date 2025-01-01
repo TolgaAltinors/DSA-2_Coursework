@@ -56,10 +56,10 @@ if __name__=="__main__":
             palindrome = isPalindrome(word_to_check.upper())
             
             if attempt == max_attempt and palindrome == False:
-                print (f"Reached maximim attempt of {max_attempt}. Exiting")
+                print (f"Reached maximim attempt of {max_attempt}.")
                 break
 
     if palindrome == False:
         print (f"No palindrome were enetered after {max_attempt} attempts.")
     else:
-        print (f"'{word_to_check}' ia a palindrome.")
+        print (f"'{word_to_check}' is a palindrome.")
