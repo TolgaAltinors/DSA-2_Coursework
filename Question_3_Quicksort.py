@@ -35,6 +35,14 @@ def output_to_console(list_to_output):
     for ind, city in enumerate(list_to_output):
         print(f"{ind+1:03} - {city}")    
 
+def output_to_file(capital_cities):
+    out_file = "List_of_Cities_Sorted.txt"
+    full_path = os.path.join(script_path, out_file)
+
+    with open(full_path, 'w') as f:
+            for line in capital_cities:
+                f.write(line + '\n')
+    print (f"File output to: {full_path}")
 
 def quicksort(list_to_sort, start = 0, end = None):
     
@@ -93,7 +101,6 @@ def create_sublist(sub_list, start, end):
     return i + 1
 
 
-
 if __name__ == '__main__':
 
     # Read in file with elements to sort
@@ -109,16 +116,13 @@ if __name__ == '__main__':
         output_to_console(capital_cities)
 
     elif user_response == 'O':
-        out_file = "List_of_Cities_Sorted.txt"
-        full_path = os.path.join(script_path, out_file)
+        output_to_file(capital_cities)
 
-        with open(full_path, 'w') as f:
-                for line in capital_cities:
-                    f.write(line + '\n')
-        print (f"File output to: {full_path}")
     else:
         print("*******************")
-        print(f"*** User response '{user_response}' not recognised. Displaying to screen. ***")
+        print(f"*** User response '{user_response}' not recognised. ***")
+        print(f"*** Outputting to file and console. ***")
         print("*******************")
         time.sleep(2)
         output_to_console(capital_cities)
+        output_to_file(capital_cities)

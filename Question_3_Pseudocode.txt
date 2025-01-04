@@ -33,7 +33,9 @@
         
         if start_index < end_index then
         
-        pivot_index := call partition function (array, start_index, end_index)
-        
-        quicksort(array, start_index, pivot_index - 1)
-        quicksort(array, pivot_index + 1, end_index)
+            pivot_index := call partition function (array, start_index, end_index)
+
+            # Sort left to the pivot index
+            quicksort(array, start_index, pivot_index - 1)
+            # Sort right to the pivot index
+            quicksort(array, pivot_index + 1, end_index)
