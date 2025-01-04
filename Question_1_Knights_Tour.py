@@ -1,10 +1,42 @@
+import numpy as np
 
+# possible moves for the knight (L shape)
+move_x = [2, 1, -1, -2, -2, -1, 1, 2]
+move_y = [1, 2, 2, 1, -1, -2, -2, -1]
+
+# create the chess board
+row_count = 8
+col_count = 8
+chess_board = np.zeros((row_count, col_count))
+
+print(chess_board)
+
+# Dictionary to hold descriptions
 keys = {'O' : 'Open',
         'C' : 'Closed',
         'B' : 'Backtracking',
         'L' : 'Las Vegas'}
 
-
+# Check to see whether position is a valid one
+def check_move_on_board(brd, row, col):
+    
+    # validate row position
+    good_row = row >= 0 and row < row_count
+    # validate column position
+    good_col = col >= 0 and col < col_count
+    # Have we visited the cell before
+    not_visited = False
+    if brd[row,col] == 0:
+        not_visited = True
+    
+    print(f"Row --> {good_row}")
+    print(f"Col --> {good_col}")
+    print(f"Not Visited --> {not_visited}")
+    
+    if good_row and good_col and not_visited:
+        
+        return True
+    
 
 if __name__=="__main__":
 
@@ -24,3 +56,4 @@ if __name__=="__main__":
     print(f"User selected the '{keys[OpenOrClose]}' version and '{keys[BacktrackOrLasVegas]}' approach for the Knight's tour.")
     
     
+    check_move_on_board(chess_board, 2, 7)
