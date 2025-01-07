@@ -1,5 +1,11 @@
 import numpy as np
 
+from open_backtracking import open_backtracking_knights_tour
+from closed_backtracking import closed_backtracking_knights_tour
+from open_lasVegas import open_lasVegas_knights_tour
+from closed_lasVegas import closed_lasVegas_knights_tour
+
+
 # possible moves for the knight (L shape)
 move_x = [2, 1, -1, -2, -2, -1, 1, 2]
 move_y = [1, 2, 2, 1, -1, -2, -2, -1]
@@ -8,6 +14,9 @@ move_y = [1, 2, 2, 1, -1, -2, -2, -1]
 row_count = 8
 col_count = 8
 chess_board = np.zeros((row_count, col_count))
+
+# set starting position
+chess_board[0, 0] = 1
 
 print(chess_board)
 
@@ -29,10 +38,6 @@ def check_move_on_board(brd, row, col):
     if brd[row,col] == 0:
         not_visited = True
     
-    print(f"Row --> {good_row}")
-    print(f"Col --> {good_col}")
-    print(f"Not Visited --> {not_visited}")
-    
     if good_row and good_col and not_visited:
         
         return True
@@ -53,7 +58,21 @@ if __name__=="__main__":
     if user_response in ('B', 'L'):
         BacktrackingOrLasVegas = user_response
 
-    print(f"User selected the '{keys[OpenOrClose]}' version and '{keys[BacktrackOrLasVegas]}' approach for the Knight's tour.")
+    # print(f"User selected the '{keys[OpenOrClose]}' version and '{keys[BacktrackOrLasVegas]}' approach for the Knight's tour.")
     
+    if OpenOrClose == "O":
+        
+        if BacktrackingOrLasVegas == 'B':
+            open_backtracking_knights_tour(chess_board, 0, 0)
+        else:
+            open_lasVegas_knights_tour()
+
+    elif OpenOrClose == 'C':
+
+        if BacktrackingOrLasVegas == 'B':
+            closed_backtracking_knights_tour()
+        else:
+            closed_lasVegas_knights_tour()
+        
     
     check_move_on_board(chess_board, 2, 7)
