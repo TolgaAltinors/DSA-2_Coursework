@@ -123,6 +123,8 @@ def create_adjacency_list(G):
 # Find MST based on Prim's algorithm
 def find_mst(G, adj_list, start_node):
     
+    if node_data_type == "int":
+        start_node = str(start_node)
     # add start node twice - second one representing the parent node
     start_node = start_node + '-' + start_node
     
@@ -139,7 +141,7 @@ def find_mst(G, adj_list, start_node):
         # retrieve minimum valued node from heap
         dist, nodes = heapq.heappop(minHeap)
         
-        # split nodes
+        # split nodes (destination and origin)
         node, parent_node = nodes.split('-')
         
         print(f"Popping node {node} with weigth {dist} from the heap")
@@ -147,8 +149,12 @@ def find_mst(G, adj_list, start_node):
         # initialise list for creating final mst
         path = [] # [parent_node, destination_node, distance]
         
+        if node_data_type == "int":
+            parent_node = int(parent_node)
+            node = int(node)
+ 
         path.append(parent_node)
-        path.append(node)
+        path.append(node)            
         path.append(dist)
         mst_edges.append(path)
         
@@ -158,9 +164,9 @@ def find_mst(G, adj_list, start_node):
             
             if next_node not in visited:
                 
-                print(f"Pushing node {next_node} with weigth {next_dist} onto the heap")
+                print(f"Pushing node {str(next_node)} with weigth {str(next_dist)} onto the heap")
                 # This keeps track of the previous node
-                next_node = next_node + '-' + node
+                next_node = str(next_node) + '-' + str(node)
                 heapq.heappush(minHeap, [next_dist, next_node])
                 
     return mst_edges
@@ -255,11 +261,15 @@ if __name__ == '__main__':
     # create a list of potential edges for user o select as a starting point
     print("Please select one of the edges as starting node")
     node_class.set_nodes(edges)
-    #edge_list = get_edges(edges)
+ 
     for node in node_class.nodes:
         print (node)
-
     start_node = input("... ")
+
+    # additional logic to cater for node names that are type integer
+    node_data_type="str"
+    if type(node_class.nodes[0]) == int:
+        node_data_type="int"
     
     # display original graph
     create_original_graph(G, edges)
