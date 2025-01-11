@@ -31,20 +31,39 @@ def get_list_to_sort() -> list :
 
 
 def output_to_console(list_to_output):
-    
+    """ Output sorted list to console
+        Arguments:
+            list_to_output
+        Returns:
+            None
+    """    
     for ind, city in enumerate(list_to_output):
         print(f"{ind+1:03} - {city}")    
 
-def output_to_file(capital_cities):
+def output_to_file(list_to_output):
+    """ Output sorted list to file
+        Arguments:
+            list_to_output
+        Returns:
+            None
+    """    
     out_file = "List_of_Cities_Sorted.txt"
     full_path = os.path.join(script_path, out_file)
 
     with open(full_path, 'w') as f:
-            for line in capital_cities:
+            for line in list_to_output:
                 f.write(line + '\n')
     print (f"File output to: {full_path}")
 
 def quicksort(list_to_sort, start = 0, end = None):
+    """ Sort the list provided
+        Arguments:
+            list_to_sort
+            start  index
+            end index
+        Returns:
+            None
+    """    
     
     # print(f"Number of cities to sort : {len(list_to_sort)}")
     # print(f"Sublist : {list_to_sort}")
@@ -61,11 +80,21 @@ def quicksort(list_to_sort, start = 0, end = None):
         # print(f"Number of cities to sort : {len(list_to_sort[start:pivot_index])}")
         # print(f"Sublist : {list_to_sort[start:pivot_index]}")
         
+        # Sort elements to the left of the pivot
         quicksort(list_to_sort, start, pivot_index - 1)
+        # Sort elements to the right of the pivot
         quicksort(list_to_sort, pivot_index + 1, end)
 
 
 def create_sublist(sub_list, start, end):
+    """ Create a sub list from list provided
+        Arguments:
+            sub_list
+            start  index
+            end index
+        Returns:
+            None
+    """    
 
     # set pivot to be the second to last element
     pivot_index = end - 1

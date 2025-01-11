@@ -2,39 +2,7 @@ import heapq
 import networkx as nx
 import matplotlib.pyplot as plt
 
-class Helper: 
-    def __init__(self, pos='', nodes=[]): 
-        self.pos = pos
-        self.nodes = nodes
 
-    # getter method 
-    def get_pos(self): 
-        return self.pos
-
-    # setter method 
-    def set_pos(self, x): 
-        self.pos = x
-
-    def set_nodes(self, adj_list):
-        
-        for s, d, w in adj_list:
-            if s not in self.nodes:
-                self.nodes.append(s)
-            if d not in self.nodes:
-                self.nodes.append(d)
-        self.nodes = sorted(self.nodes)
-
-        
-def get_edges(edges):
-    
-    edge_list = []
-    for s, d, w in edges:
-        if s not in edge_list:
-            edge_list.append(s)
-        if d not in edge_list:
-            edge_list.append(d)
-    return sorted(edge_list)
-    
 # Add fix positions for nodes so it displays the same way every time
 def add_node_positions():
 
@@ -52,20 +20,17 @@ def add_node_positions():
     return node_pos    
 
 # Display original graph
-def create_original_graph(G, edges):
-# def create_original_graph(G, edges, node_pos):
+def create_original_graph(G, edges, node_pos):
     
     fig = plt.figure(figsize=(6, 5))
     
     G.add_weighted_edges_from(edges)
 
     pos = nx.circular_layout(G)
-    
-    node_class.set_pos(pos)
-    
+
     # Draw graph
     nx.draw(G,
-            pos=node_class.get_pos(),
+            pos=node_pos,
             with_labels=True,
             node_size=700,
             node_color='lightblue',
@@ -77,7 +42,7 @@ def create_original_graph(G, edges):
     edge_labels = nx.get_edge_attributes(G, 'weight')
 
     # Add egde lables to graph
-    nx.draw_networkx_edge_labels(G, pos=node_class.get_pos(), edge_labels=edge_labels)
+    nx.draw_networkx_edge_labels(G, pos=node_pos, edge_labels=edge_labels)
     
     print("*****")
     print("*****")
@@ -166,15 +131,13 @@ def find_mst(G, adj_list, start_node):
     return mst_edges
 
 # Create final MST graph
-# def create_final_mst_graph(G_mst, mst_edges, node_pos):
-def create_final_mst_graph(G_mst, mst_edges):
+def create_final_mst_graph(G_mst, mst_edges, node_pos):
 
     fig = plt.figure(figsize=(6, 5))
     
     total_distance = 0
     
     # Add edges based on mst values
-
     for node_index in range(1,len(mst_edges)):
         
         node_elements = mst_edges[node_index]
@@ -200,7 +163,7 @@ def create_final_mst_graph(G_mst, mst_edges):
         node_colour.append('red')
 
         nx.draw(G_mst,
-                pos=node_class.get_pos(),
+                pos=node_pos,
                 with_labels=True,
                 node_size=700,
                 node_color=node_colour,  #'lightgreen',
@@ -208,10 +171,10 @@ def create_final_mst_graph(G_mst, mst_edges):
                 font_weight='bold')
         
         mst_edge_labels = nx.get_edge_attributes(G_mst, 'weight')
-        nx.draw_networkx_edge_labels(G_mst, pos=node_class.get_pos(), edge_labels=mst_edge_labels)
+        nx.draw_networkx_edge_labels(G_mst, pos=node_pos, edge_labels=mst_edge_labels)
 
         print("*****")
-        print(f"***** Adding node ({end_node}) to MST.")
+        print(f"***** Adding node ({start_node}) --> ({end_node}) with weight {attribute} to MST.")
         print("*****")
 
         if node_index == len(mst_edges) -1:
@@ -223,17 +186,41 @@ def create_final_mst_graph(G_mst, mst_edges):
         plt.margins(0.2, 0.2)
         plt.show(block=False)
         if node_index == len(mst_edges)-1:
-            plt.pause(8)
+            plt.pause(5)
         else:
             plt.pause(2)
 
 
 if __name__ == '__main__':
     
-    node_class = Helper()
-    
+    from random import randint
     # Create a graph objects
     G = nx.Graph()
+    #G = nx.gnp_random_graph(10, 0.3, 20)
+    # G = nx.complete_graph(10)
+
+    pos = nx.circular_layout(G)    
+    
+    # nx.set_edge_attributes(G, {e: {'weight': randint(1, 10)} for e in G.edges})
+    
+    # fig = plt.figure(figsize=(6, 5))
+    
+    # nx.draw(G,pos =pos,
+    #                 with_labels=True,
+    #                 node_size=700,
+    #                 node_color='lightgreen',
+    #                 font_size=10,
+    #                 font_weight='bold')
+            
+    # mst_edge_labels = nx.get_edge_attributes(G, 'weight')
+    # nx.draw_networkx_edge_labels(G, pos=pos, edge_labels=mst_edge_labels)    
+    
+    # plt.suptitle("Original graph",color='red')
+    # plt.margins(0.2, 0.2)
+    # plt.show(block=False)
+    # plt.pause(3)
+
+    
     G_mst = nx.Graph()
 
     # nodes = ["A", "B", "G", "D", "E", "C", "F", "Z"]
@@ -243,32 +230,23 @@ if __name__ == '__main__':
     #         ("E", "Z", 1), ("F", "Z", 6), ("C", "Z", 9)
     #         ]
 
-    # edges = [('1', '2', 1), ('1', '7', 10), ('2', '4', 3), ('7', '5', 3),
-    #         ('1', '3', 5), ('4', '3', 8), ('3', '5', 6), ('4', '6', 1),
-    #         ('5', '0', 1), ('6', '0', 6), ('3', '0', 9)
-    #         ]
-    edges = [(1, 2, 1), (1, 7, 10), (2, 4, 3), (7, 5, 3),
-            (1, 3, 5), (4, 3, 8), (3, 5, 6), (4, 6, 1),
-            (5, 0, 1), (6, 0, 6), (3, 0, 9)
+    edges = [('1', '2', 1), ('1', '7', 10), ('2', '4', 3), ('7', '5', 3),
+            ('1', '3', 5), ('4', '3', 8), ('3', '5', 6), ('4', '6', 1),
+            ('5', '0', 1), ('6', '0', 6), ('3', '0', 9)
             ]
     
-    # create a list of potential edges for user o select as a starting point
-    print("Please select one of the edges as starting node")
-    node_class.set_nodes(edges)
-    #edge_list = get_edges(edges)
-    for node in node_class.nodes:
-        print (node)
+    # # add node positions to dictionary
+    # node_pos = add_node_positions()
 
-    start_node = input("... ")
-    
-    # display original graph
-    create_original_graph(G, edges)
+    # # display original graph
+    # create_original_graph(G, edges, node_pos)
 
     # create adjacency list to hold each nodes' neigbours
     adj_list = create_adjacency_list(G)
     
     # find mst (G, adj list, start node)
-    mst_edges = find_mst(G, adj_list, start_node)
+    mst_edges = find_mst(G, adj_list, '1')
     
     # show final mst
-    create_final_mst_graph(G_mst, mst_edges)
+#    create_final_mst_graph(G_mst, mst_edges, node_pos)
+    create_final_mst_graph(G_mst, mst_edges, pos)
