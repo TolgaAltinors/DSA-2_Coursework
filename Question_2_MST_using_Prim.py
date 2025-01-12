@@ -25,15 +25,15 @@ class Helper:
         self.nodes = sorted(self.nodes)
 
         
-def get_edges(edges):
+# def get_edges(edges):
     
-    edge_list = []
-    for s, d, w in edges:
-        if s not in edge_list:
-            edge_list.append(s)
-        if d not in edge_list:
-            edge_list.append(d)
-    return sorted(edge_list)
+#     edge_list = []
+#     for s, d, w in edges:
+#         if s not in edge_list:
+#             edge_list.append(s)
+#         if d not in edge_list:
+#             edge_list.append(d)
+#     return sorted(edge_list)
     
 # Add fix positions for nodes so it displays the same way every time
 def add_node_positions():
@@ -152,12 +152,14 @@ def find_mst(G, adj_list, start_node):
         if node_data_type == "int":
             parent_node = int(parent_node)
             node = int(node)
- 
+
+        # Create origin to destination node path with weight
         path.append(parent_node)
         path.append(node)            
         path.append(dist)
         mst_edges.append(path)
         
+        # update list of visited nodes
         visited.append(node)
         
         for next_dist, next_node in adj_list[node]:
@@ -233,52 +235,74 @@ def create_final_mst_graph(G_mst, mst_edges):
         else:
             plt.pause(2)
 
+def generate_connected_graph(n_nodes,n_edges):
+    import random
+    while True:
+        
+        G = nx.gnm_random_graph(n_nodes, n_edges)
+        if nx.is_connected(G):
+            # add random weight
+            for (s, d, w) in G.edges(data=True):
+                w['weight'] = random.randint(0,20)
+    
+            return G
 
 if __name__ == '__main__':
     
+    edges = [("A", "B", 1), ("A", "G", 10), ("B", "D", 3), ("G", "E", 3),
+            ("A", "C", 5), ("D", "C", 8), ("C", "E", 6), ("D", "F", 1),
+            ("E", "Z", 1), ("F", "Z", 6), ("C", "Z", 9)
+            ]
+
+    # edges = [('1', '2', 1), ('1', '7', 10), ('2', '4', 3), ('7', '5', 3),
+    #         ('1', '3', 5), ('4', '3', 8), ('3', '5', 6), ('4', '6', 1),
+    #         ('5', '0', 1), ('6', '0', 6), ('3', '0', 9)
+    #         ]
+    # edges = [(1, 2, 1), (1, 7, 10), (2, 4, 3), (7, 5, 3),
+    #         (1, 3, 5), (4, 3, 8), (3, 5, 6), (4, 6, 1),
+    #         (5, 0, 1), (6, 0, 6), (3, 0, 9)
+    #         ]
+
+    # # for testing random graphs
+    # edges = []
+    # G = generate_connected_graph(10, 9)
+    # for node in G.nodes():
+    #     neighbour_list = [n for n in G.neighbors(node)]
+    #     for s, d, w in G.edges(data="weight"):
+    #         if s == node and d in neighbour_list:
+    #             edges.append((s, d, w))
+
     node_class = Helper()
     
     # Create a graph objects
     G = nx.Graph()
     G_mst = nx.Graph()
 
-    # nodes = ["A", "B", "G", "D", "E", "C", "F", "Z"]
+    node_class.set_nodes(edges)
 
-    # edges = [("A", "B", 1), ("A", "G", 10), ("B", "D", 3), ("G", "E", 3),
-    #         ("A", "C", 5), ("D", "C", 8), ("C", "E", 6), ("D", "F", 1),
-    #         ("E", "Z", 1), ("F", "Z", 6), ("C", "Z", 9)
-    #         ]
-
-    # edges = [('1', '2', 1), ('1', '7', 10), ('2', '4', 3), ('7', '5', 3),
-    #         ('1', '3', 5), ('4', '3', 8), ('3', '5', 6), ('4', '6', 1),
-    #         ('5', '0', 1), ('6', '0', 6), ('3', '0', 9)
-    #         ]
-    edges = [(1, 2, 1), (1, 7, 10), (2, 4, 3), (7, 5, 3),
-            (1, 3, 5), (4, 3, 8), (3, 5, 6), (4, 6, 1),
-            (5, 0, 1), (6, 0, 6), (3, 0, 9)
-            ]
-    
     # create a list of potential edges for user o select as a starting point
     print("Please select one of the edges as starting node")
-    node_class.set_nodes(edges)
- 
+
     for node in node_class.nodes:
         print (node)
     start_node = input("... ")
 
-    # additional logic to cater for node names that are type integer
-    node_data_type="str"
-    if type(node_class.nodes[0]) == int:
-        node_data_type="int"
-    
-    # display original graph
-    create_original_graph(G, edges)
+    if start_node in node_class.nodes:
+        # additional logic to cater for node names that are type integer
+        node_data_type="str"
+        if type(node_class.nodes[0]) == int:
+            node_data_type="int"
+        
+        # display original graph
+        create_original_graph(G, edges)
 
-    # create adjacency list to hold each nodes' neigbours
-    adj_list = create_adjacency_list(G)
-    
-    # find mst (G, adj list, start node)
-    mst_edges = find_mst(G, adj_list, start_node)
-    
-    # show final mst
-    create_final_mst_graph(G_mst, mst_edges)
+        # create adjacency list to hold each nodes' neigbours
+        adj_list = create_adjacency_list(G)
+        
+        # find mst (G, adj list, start node)
+        mst_edges = find_mst(G, adj_list, start_node)
+        
+        # show final mst
+        create_final_mst_graph(G_mst, mst_edges)
+    else:
+        print(f"Node selected ({start_node}) not in available nodes.")
