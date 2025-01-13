@@ -219,7 +219,7 @@ def create_final_mst_graph(G_mst, mst_edges):
         nx.draw_networkx_edge_labels(G_mst, pos=node_class.get_pos(), edge_labels=mst_edge_labels)
 
         print("*****")
-        print(f"***** Adding node ({end_node}) to MST.")
+        print(f"***** MST build step: node ({start_node}) --> ({end_node}) with weight of ({attribute})")
         print("*****")
 
         if node_index == len(mst_edges) -1:
@@ -231,9 +231,9 @@ def create_final_mst_graph(G_mst, mst_edges):
         plt.margins(0.2, 0.2)
         plt.show(block=False)
         if node_index == len(mst_edges)-1:
-            plt.pause(8)
+            plt.pause(final_pause)
         else:
-            plt.pause(2)
+            plt.pause(step_pause)
 
 def generate_connected_graph(n_nodes,n_edges):
     import random
@@ -248,6 +248,10 @@ def generate_connected_graph(n_nodes,n_edges):
             return G
 
 if __name__ == '__main__':
+    
+    # Pause timings
+    step_pause = 4
+    final_pause = 30
     
     edges = [("A", "B", 1), ("A", "G", 10), ("B", "D", 3), ("G", "E", 3),
             ("A", "C", 5), ("D", "C", 8), ("C", "E", 6), ("D", "F", 1),
