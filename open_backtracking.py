@@ -1,5 +1,6 @@
 import numpy as np
 import helpers
+from helpers import check_move_on_board
 
 # Initialise some variables
 x_moves = helpers.get_x_moves()
@@ -19,22 +20,6 @@ print()
 print("*** Starting board ***")
 print(chess_board)
 print()
-
-# Check to see whether position is a valid one
-# Is the row, col position within the board's boundary
-# Has the row, col position previously been visited
-def check_move_on_board(brd, row, col):
-    
-    # validate row position
-    good_row = row >= 0 and row < row_count
-
-    # validate column position
-    good_col = col >= 0 and col < col_count
-
-    # Have we visited the cell before
-    if good_row and good_col and brd[row, col] == 0:
-        return True
-
 
 # The recursive function that will find the next moves
 def find_knights_tour(chess_board, curr_x, curr_y, num_of_moves=1):

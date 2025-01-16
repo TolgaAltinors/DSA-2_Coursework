@@ -26,8 +26,6 @@ if __name__=="__main__":
     if user_response in ('B', 'L'):
         BacktrackingOrLasVegas = user_response
 
-    # print(f"User selected the '{keys[OpenOrClose]}' version and '{keys[BacktrackOrLasVegas]}' approach for the Knight's tour.")
-    
     if OpenOrClose == "O":
         
         if BacktrackingOrLasVegas == 'B':

@@ -84,7 +84,6 @@ def create_adjacency_list(G):
 
     return adj_list
 
-
 # Find MST based on Prim's algorithm
 def find_mst(G, adj_list, start_node):
     
@@ -211,6 +210,7 @@ def generate_connected_graph(n_nodes,n_edges):
                 w['weight'] = random.randint(0,20)
     
             return G
+
 
 if __name__ == '__main__':
     
