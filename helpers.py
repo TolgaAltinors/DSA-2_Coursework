@@ -10,7 +10,6 @@ def get_y_moves():
 
 def zip_x_y_moves():
     return [[x, y] for x, y in zip(get_x_moves(), get_y_moves())]
-    # return [[('x',x), ('y',y)] for x, y in zip(get_x_moves(), get_y_moves())]
 
 # Set row and column counts
 def get_row_count():
