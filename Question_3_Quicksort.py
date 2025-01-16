@@ -14,21 +14,20 @@ def get_list_to_sort() -> list :
             {list} -- list of words
     """
     # Read in file with list of cities - file is in the same location as script
-    file_name = "List_of_Cities.txt"
+    file_name = "List_of_Elements.txt"
     
     # Build the path for the text file
     full_path = os.path.join(script_path, file_name)
     
     # Create list to hold the data
-    capital_cities = []
+    elements_to_sort = []
     
     # Open the file and read contents into list
     with open(full_path, 'r') as f:
         for line in f:
-            capital_cities.append(line.strip())
+            elements_to_sort.append(line.strip())
                 
-    return capital_cities
-
+    return elements_to_sort
 
 def output_to_console(list_to_output):
     """ Output sorted list to console
@@ -37,8 +36,8 @@ def output_to_console(list_to_output):
         Returns:
             None
     """    
-    for ind, city in enumerate(list_to_output):
-        print(f"{ind+1:03} - {city}")    
+    for ind, element in enumerate(list_to_output):
+        print(f"{ind+1:03} - {element}")    
 
 def output_to_file(list_to_output):
     """ Output sorted list to file
@@ -47,7 +46,7 @@ def output_to_file(list_to_output):
         Returns:
             None
     """    
-    out_file = "List_of_Cities_Sorted.txt"
+    out_file = "List_of_Elements_Sorted.txt"
     full_path = os.path.join(script_path, out_file)
 
     with open(full_path, 'w') as f:
@@ -84,7 +83,6 @@ def quicksort(list_to_sort, start = 0, end = None):
         quicksort(list_to_sort, start, pivot_index - 1)
         # Sort elements to the right of the pivot
         quicksort(list_to_sort, pivot_index + 1, end)
-
 
 def create_sublist(sub_list, start, end):
     """ Create a sub list from list provided
@@ -133,19 +131,19 @@ def create_sublist(sub_list, start, end):
 if __name__ == '__main__':
 
     # Read in file with elements to sort
-    capital_cities = get_list_to_sort()
-    print(f"Number of cities to sort : {len(capital_cities)}")
+    elements_to_sort = get_list_to_sort()
+    print(f"Number of elements to sort : {len(elements_to_sort)}")
     
-    quicksort(capital_cities)
+    quicksort(elements_to_sort)
     
     # Output return from quick sort and print to console
     user_response = input("Display output to console or output to file? Type 'D' (Display) or 'O' (Output). ")
     
     if user_response == 'D':
-        output_to_console(capital_cities)
+        output_to_console(elements_to_sort)
 
     elif user_response == 'O':
-        output_to_file(capital_cities)
+        output_to_file(elements_to_sort)
 
     else:
         print("*******************")
@@ -153,5 +151,5 @@ if __name__ == '__main__':
         print(f"*** Outputting to file and console. ***")
         print("*******************")
         time.sleep(2)
-        output_to_console(capital_cities)
-        output_to_file(capital_cities)
+        output_to_console(elements_to_sort)
+        output_to_file(elements_to_sort)
