@@ -14,9 +14,25 @@ row_count = helpers.get_row_count()
 col_count = helpers.get_col_count()
 
 
+def find_possible_moves(x, y, chess_board):
+    # find possible moves by adding what's x_y_moves to current x and y
+    stored_moves = []
+
+    # x_y_moves contains all possible moves for the knight
+    for x_move, y_move in x_y_moves:
+        
+        new_x, new_y = x + x_move, y + y_move
+
+        # check if it is a valid move ie it is on the board and not visited
+        if check_move_on_board(chess_board, new_x, new_y):
+            stored_moves.append((new_x, new_y))    
+
+    return stored_moves
+
+
 def find_knights_tour(user_response):
 
-    attempt_count = 300000
+    attempt_count = 500000
 
     best_effort = 0
     best_chess_board = np.zeros((row_count, col_count))
@@ -41,16 +57,16 @@ def find_knights_tour(user_response):
         for num_of_moves in range(2, max_moves):
             
             # store possible moves in list
-            stored_moves=[]
+            stored_moves = find_possible_moves(x, y, chess_board) 
             
             # find possible moves by adding what's x_y_moves to current x and y
-            for x_move, y_move in x_y_moves:
+            # for x_move, y_move in x_y_moves:
                 
-                new_x, new_y = x + x_move, y + y_move
+            #     new_x, new_y = x + x_move, y + y_move
                 
-                # check if it is a valid move
-                if check_move_on_board(chess_board, new_x, new_y):
-                    stored_moves.append((new_x, new_y))
+            #     # check if it is a valid move
+            #     if check_move_on_board(chess_board, new_x, new_y):
+            #         stored_moves.append((new_x, new_y))
 
             # break condition
             if len(stored_moves) == 0:
@@ -83,11 +99,15 @@ def find_knights_tour(user_response):
                     # Get starting postion from chess board
                     start_pos = np.argwhere(chess_board == 1)
                     start_x, start_y = start_pos[0][0], start_pos[0][1]
-
-                    # We know the last position - x and y
+                    start_pos = (start_x, start_y)
+                    # We know the last position we populated - x and y
                     # Find all possible moves from here
+                    # store possible moves in list - Minus the check for previously visited
+                    stored_moves = find_possible_moves(x, y, chess_board, check_visted=False) 
 
                     # Check to see whether original start position is one of them
+                    if start_pos in stored_moves:
+                        return True, chess_board
 
 
     print(f"**** {attempts + 1} attempts were made to find a knight's tour")
@@ -103,16 +123,17 @@ def find_knights_tour(user_response):
 def lasVegas_knights_tour(user_response):
     
     if user_response == 3:
-        print("**************************************")
-        print("*** Open knight's tour using Las Vegas")
-        print("**************************************")
+        print("******************************************")
+        print("*** Open knight's tour using Las Vegas ***")
+        print("******************************************")
+        
     elif user_response == 4:
-        print("****************************************")
-        print("*** Closed knight's tour using Las Vegas")
-        print("****************************************")
+        print("********************************************")
+        print("*** Closed knight's tour using Las Vegas ***")
+        print("********************************************")
 
     succsess, board = find_knights_tour(user_response)
-
+    print()
     if succsess:
         print()
         print("*** Found a valid tour ***")
@@ -123,4 +144,4 @@ def lasVegas_knights_tour(user_response):
         print()
     
     print(board)
-    
+    print()

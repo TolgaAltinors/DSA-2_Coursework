@@ -22,7 +22,7 @@ def get_col_count():
 # Check to see whether position is a valid one
 # Is the row, col position within the board's boundary
 # Has the row, col position previously been visited
-def check_move_on_board(brd, row, col):
+def check_move_on_board(brd, row, col, check_visted=True):
     
     # validate row position
     good_row = row >= 0 and row < get_row_count()
@@ -31,5 +31,9 @@ def check_move_on_board(brd, row, col):
     good_col = col >= 0 and col < get_col_count()
 
     # Have we visited the cell before
-    if good_row and good_col and brd[row, col] == 0:
-        return True
+    if check_visted:
+        if good_row and good_col and brd[row, col] == 0:
+            return True
+    else:
+        if good_row and good_col:
+            return True        

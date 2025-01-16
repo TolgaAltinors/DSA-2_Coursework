@@ -1,43 +1,31 @@
-
 from closed_backtracking import closed_backtracking_knights_tour
-from open_lasVegas import open_lasVegas_knights_tour
 from closed_lasVegas import closed_lasVegas_knights_tour
 
 
 # Dictionary to hold descriptions
-keys = {'O' : 'Open',
-        'C' : 'Closed',
-        'B' : 'Backtracking',
-        'L' : 'Las Vegas'}
+keys = {1 : 'Back tracking - Open',
+        2 : 'Back tracking - Closed',
+        3 : 'Las Vegas - Open',
+        4 : 'Las Vegas - Closed'}
 
 
 if __name__=="__main__":
 
-#   Initialise variables
-    OpenOrClose = 'O'
-    BacktrackOrLasVegas = 'B'
-    
-    # If user enters an invalid choice the deaults above will be used
-    user_response = input("Choose 'Open' or 'Close' version for Knight's Tour? Type 'O' (Open) or 'C' (Close). ")
-    if user_response in ('O', 'C'):
-        OpenOrClose = user_response
+    print("Please select from one of the options for the knight's tour. Type corresponding number.")
+    for k, v in keys.items():
+        print(f"{k} - {v}")
+    user_response = int(input("... "))
+
+    if user_response == 1:
+        from open_backtracking import open_backtracking_knights_tour
+        open_backtracking_knights_tour()
         
-    user_response = input("Choose 'Backtracking' or 'Las Vegas' approach for Knight's Tour? Type 'B' (Backtracking) or 'L' (Las Vegasose). ")
-    if user_response in ('B', 'L'):
-        BacktrackingOrLasVegas = user_response
+    elif user_response == 2:
+        closed_backtracking_knights_tour()
 
-    if OpenOrClose == "O":
-        
-        if BacktrackingOrLasVegas == 'B':
-            from open_backtracking import open_backtracking_knights_tour
+    elif user_response == 3 or user_response == 4:
+        from lasVegas import lasVegas_knights_tour
+        lasVegas_knights_tour(user_response)
+    else:
+        print("Number entered not matched to the option given")
 
-            open_backtracking_knights_tour()
-        else:
-            open_lasVegas_knights_tour()
-
-    elif OpenOrClose == 'C':
-
-        if BacktrackingOrLasVegas == 'B':
-            closed_backtracking_knights_tour()
-        else:
-            closed_lasVegas_knights_tour()
