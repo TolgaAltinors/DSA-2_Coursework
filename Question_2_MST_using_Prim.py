@@ -24,33 +24,6 @@ class Helper:
                 self.nodes.append(d)
         self.nodes = sorted(self.nodes)
 
-        
-# def get_edges(edges):
-    
-#     edge_list = []
-#     for s, d, w in edges:
-#         if s not in edge_list:
-#             edge_list.append(s)
-#         if d not in edge_list:
-#             edge_list.append(d)
-#     return sorted(edge_list)
-    
-# Add fix positions for nodes so it displays the same way every time
-def add_node_positions():
-
-    node_pos = {
-        "A" : [ 0, 2],
-        "B" : [ 1, 3],
-        "G" : [ 1, 1],
-        "D" : [ 2, 3],
-        "E" : [ 2, 1],
-        "C" : [ 2, 2],
-        "F" : [ 3, 3],
-        "Z" : [ 3, 1]      
-    }
-
-    return node_pos    
-
 # Display original graph
 def create_original_graph(G, edges):
 # def create_original_graph(G, edges, node_pos):
@@ -61,6 +34,7 @@ def create_original_graph(G, edges):
 
     pos = nx.circular_layout(G)
     
+    # assign node positions so we can use then in the MST
     node_class.set_pos(pos)
     
     # Draw graph
@@ -88,37 +62,28 @@ def create_original_graph(G, edges):
     plt.suptitle("Original graph",color='red')
     plt.margins(0.2, 0.2)
     plt.show(block=False)
-    plt.pause(3)
+    plt.pause(8)
 
 # Create adjacency list
 def create_adjacency_list(G):
 
-    # Create adjaceny list for each node's neigbours including distance 
+    # Create adjacency list for each node's neighbours including distance 
     # Store each neighbour as a set with weight and node name
     # Store weight as first value as the heapq will use that for priority
     adj_list = { node:[] for node in G.nodes }
 
-    # loop through nodes
-    for node in G.nodes:
-        
-        # find all neighbours of node 
-        neighbour_list = [n for n in G.neighbors(node)]
-        
-        print (f"neighbours of ({node}) = {neighbour_list}")
-        
-        # loop through start node, destination node and weight properties
-        for s, d, w in G.edges(data="weight"):
+    # loop through start node, destination node and weight properties
+    for s, d, w in G.edges(data="weight"):
             
-            if s == node and d in neighbour_list:
-                
-                # add the weight and destination node
-                neighbour_to_add = (w, d)
-                adj_list[node].append(neighbour_to_add)
-                # also add the opposite direction
-                neighbour_to_add = (w, node)
-                adj_list[d].append(neighbour_to_add)
+        # add the weight and destination node
+        neighbour_to_add = (w, d)
+        adj_list[s].append(neighbour_to_add)
+        # also add the opposite direction
+        neighbour_to_add = (w, s)
+        adj_list[d].append(neighbour_to_add)
 
     return adj_list
+
 
 # Find MST based on Prim's algorithm
 def find_mst(G, adj_list, start_node):
@@ -239,7 +204,7 @@ def generate_connected_graph(n_nodes,n_edges):
     import random
     while True:
         
-        G = nx.gnm_random_graph(n_nodes, n_edges)
+        G = nx.gnm_random_graph(n_nodes, n_edges, seed=10)
         if nx.is_connected(G):
             # add random weight
             for (s, d, w) in G.edges(data=True):
@@ -258,16 +223,7 @@ if __name__ == '__main__':
             ("E", "Z", 1), ("F", "Z", 6), ("C", "Z", 9)
             ]
 
-    # edges = [('1', '2', 1), ('1', '7', 10), ('2', '4', 3), ('7', '5', 3),
-    #         ('1', '3', 5), ('4', '3', 8), ('3', '5', 6), ('4', '6', 1),
-    #         ('5', '0', 1), ('6', '0', 6), ('3', '0', 9)
-    #         ]
-    # edges = [(1, 2, 1), (1, 7, 10), (2, 4, 3), (7, 5, 3),
-    #         (1, 3, 5), (4, 3, 8), (3, 5, 6), (4, 6, 1),
-    #         (5, 0, 1), (6, 0, 6), (3, 0, 9)
-    #         ]
-
-    # # for testing random graphs
+    # for testing random graphs
     # edges = []
     # G = generate_connected_graph(10, 9)
     # for node in G.nodes():
@@ -277,36 +233,33 @@ if __name__ == '__main__':
     #             edges.append((s, d, w))
 
     node_class = Helper()
+    # Set available nodes based on available edges. We use this to give the user input
+    node_class.set_nodes(edges)
     
     # Create a graph objects
     G = nx.Graph()
     G_mst = nx.Graph()
 
-    node_class.set_nodes(edges)
-
-    # create a list of potential edges for user o select as a starting point
+        # create a list of potential edges for user o select as a starting point
     print("Please select one of the edges as starting node")
 
     for node in node_class.nodes:
         print (node)
     start_node = input("... ")
 
-    if start_node in node_class.nodes:
-        # additional logic to cater for node names that are type integer
-        node_data_type="str"
-        if type(node_class.nodes[0]) == int:
-            node_data_type="int"
-        
-        # display original graph
-        create_original_graph(G, edges)
+    # additional logic to cater for node names that are type integer
+    node_data_type="str"
+    if type(node_class.nodes[0]) == int:
+        node_data_type="int"
+    
+    # display original graph
+    create_original_graph(G, edges)
 
-        # create adjacency list to hold each nodes' neigbours
-        adj_list = create_adjacency_list(G)
-        
-        # find mst (G, adj list, start node)
-        mst_edges = find_mst(G, adj_list, start_node)
-        
-        # show final mst
-        create_final_mst_graph(G_mst, mst_edges)
-    else:
-        print(f"Node selected ({start_node}) not in available nodes.")
+    # create adjacency list to hold each nodes' neigbours
+    adj_list = create_adjacency_list(G)
+    
+    # find mst (G, adj list, start node)
+    mst_edges = find_mst(G, adj_list, start_node)
+    
+    # show final mst
+    create_final_mst_graph(G_mst, mst_edges)
