@@ -32,12 +32,12 @@ def find_possible_moves(x, y, chess_board):
 
 def find_knights_tour(user_response):
 
-    attempt_count = 500000
+    attempt_count = 10000
 
     best_effort = 0
     best_chess_board = np.zeros((row_count, col_count))
-
-    # store original start position for checking closed tour
+    
+    # variables to store original start position. For checking closed tour
     start_x, start_y = 0, 0
     
     for attempts in range(attempt_count):
@@ -48,7 +48,7 @@ def find_knights_tour(user_response):
         # get random start position        
         x = random.randint(0, row_count - 1)
         y = random.randint(0, col_count - 1)
-        chess_board[x][y] = 1
+        chess_board[x, y] = 1
         
         # max moves we can make
         max_moves = row_count * col_count
@@ -59,15 +59,6 @@ def find_knights_tour(user_response):
             # store possible moves in list
             stored_moves = find_possible_moves(x, y, chess_board) 
             
-            # find possible moves by adding what's x_y_moves to current x and y
-            # for x_move, y_move in x_y_moves:
-                
-            #     new_x, new_y = x + x_move, y + y_move
-                
-            #     # check if it is a valid move
-            #     if check_move_on_board(chess_board, new_x, new_y):
-            #         stored_moves.append((new_x, new_y))
-
             # break condition
             if len(stored_moves) == 0:
                 
@@ -80,14 +71,14 @@ def find_knights_tour(user_response):
             
             # select a random x, y from stored_moves and update chess board
             new_x, new_y = random.choice(stored_moves)
-            chess_board[new_x][new_y] = num_of_moves
+            chess_board[new_x, new_y] = num_of_moves
             
             # set x, y to latest position
             x, y = new_x, new_y
             # print(f"X = {new_x} --- Y = {new_y}")
             # print(chess_board)
         
-            # check if we found a vaild tour
+            # check if we found a valid tour
             if num_of_moves == max_moves:
 
                 # Open Knight's tour, return the chess board
@@ -132,9 +123,9 @@ def lasVegas_knights_tour(user_response):
         print("*** Closed knight's tour using Las Vegas ***")
         print("********************************************")
 
-    succsess, board = find_knights_tour(user_response)
+    success, board = find_knights_tour(user_response)
     print()
-    if succsess:
+    if success:
         print()
         print("*** Found a valid tour ***")
         print()

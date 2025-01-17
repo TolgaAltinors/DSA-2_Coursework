@@ -1,5 +1,3 @@
-from closed_backtracking import closed_backtracking_knights_tour
-from closed_lasVegas import closed_lasVegas_knights_tour
 
 
 # Dictionary to hold descriptions
@@ -21,6 +19,7 @@ if __name__=="__main__":
         open_backtracking_knights_tour()
         
     elif user_response == 2:
+        from closed_backtracking import closed_backtracking_knights_tour
         closed_backtracking_knights_tour()
 
     elif user_response == 3 or user_response == 4:

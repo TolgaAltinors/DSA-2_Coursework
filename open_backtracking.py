@@ -38,22 +38,27 @@ def find_knights_tour(chess_board, curr_x, curr_y, num_of_moves=1):
         if check_move_on_board(chess_board, next_x, next_y):
             
             # update the cell with the movement counter
-            chess_board[next_x][next_y] = num_of_moves
+            chess_board[next_x, next_y] = num_of_moves
             
             if find_knights_tour(chess_board, next_x, next_y, num_of_moves+1):
                 return True
         
             # Set back to zero as not successful 
-            chess_board[next_x][next_y] = 0
+            chess_board[next_x, next_y] = 0
     return False
 
 
 def open_backtracking_knights_tour():
     
     if find_knights_tour(chess_board, 0, 0):
-        print("*** Found a valid tour ***")
-        print(chess_board)
+        print("****************************************************************")
+        print("*** Found a valid tour using backtracking with open approach ***")
+        print("****************************************************************")
 
     else:
-        print("*** Failed to find a valid tour ***")
+        print("*************************************************************************")
+        print("*** Failed to find a valid tour using backtracking with open approach ***")
+        print("*************************************************************************")
 
+    print()
+    print(chess_board)
